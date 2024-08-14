@@ -1,0 +1,26 @@
+import random
+import requests
+
+# Fetch a list of real English words from an online dictionary
+word_site = "https://www.mit.edu/~ecprice/wordlist.10000"
+response = requests.get(word_site)
+words = response.text.splitlines()
+
+# Select a random sample of 300 words from the list
+random_words = random.sample(words, 300)
+
+def random_word():
+    word = random.choice(random_words)
+    index = random.randint(0, len(word) - 1)
+    return word[:index] + word[index].upper() + word[index + 1:]
+
+def passphrase(include_special=False):
+    special_chars = "!@#$%^&*()-_=+[]{}|;:,.<>?/`~"
+    phrase = ''.join([random_word() for _ in range(3)]) + str(random.randint(100, 999))
+    if include_special:
+        phrase += random.choice(special_chars)
+    return phrase
+
+# usage
+print(passphrase(include_special=True))  # with special character
+print(passphrase())  # without special character
